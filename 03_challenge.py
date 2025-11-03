@@ -11,8 +11,6 @@ import typer
 def hash(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
-class TimeOut(Exception):
-    pass
 
 async def check_timeout(timeout: float):
     t0 = time.perf_counter()
