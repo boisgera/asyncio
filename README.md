@@ -8,3 +8,5 @@ Async Python
  2. Shared data
 
  3. HTTP requests
+
+ 4. Marimo async cells
