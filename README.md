@@ -1,3 +1,10 @@
+Async Python
+================================================================================
 
-TODO:
-  - long task (e.g.) mining with possible interrupt.
+ 0. Blinking LEDs
+
+ 1. Mining challenge
+
+ 2. Shared data
+
+ 3. HTTP requests
