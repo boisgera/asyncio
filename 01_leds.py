@@ -1,14 +1,17 @@
 import time
 
+
 def display_white():
     while True:
         print("⚪")
         time.sleep(1.0)
 
+
 def display_black():
     while True:
         print("⚫")
         time.sleep(0.5)
+
 
 def display_white_and_black():
     while True:
@@ -16,7 +19,7 @@ def display_white_and_black():
         print("⚫")
         time.sleep(0.5)
         print("⚫")
-        time.sleep(0.5)        
+        time.sleep(0.5)
 
 
 # display_white()
