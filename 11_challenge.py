@@ -23,14 +23,14 @@ def solve_challenge(data: bytes, strength: int) -> bytes:
 
 
 def main(data: str, strength: int = 1) -> None:
-    data = data.encode("utf-8")
+    binary_data = data.encode("utf-8")
     print(f"{data = }")
     print(f"{strength = }")
     t0 = time.perf_counter()
-    solution = solve_challenge(data, strength)
+    solution = solve_challenge(binary_data, strength)
     dt = time.perf_counter() - t0
     print(f"{solution = }")
-    print(f"{solution.startswith(data) = }")
+    print(f"{solution.startswith(binary_data) = }")
     print(f"{hash(solution) = }")
     print(f"{hash(solution).endswith('00' * strength) = }")
     print(f"elapsed time: {dt:.1f} s")
