@@ -1,6 +1,9 @@
+# Python Standard Library
 import asyncio
-import httpx
 import time
+
+# Third-Party Libraries
+import httpx
 
 ROOT = "https://httpbingo.org/"
 URLS = [
@@ -14,9 +17,7 @@ URLS = [
 async def main():
     httpx_async = httpx.AsyncClient()
     t0 = time.perf_counter()
-    response_promises = [
-        httpx_async.get(url, follow_redirects=True) for url in URLS
-    ]
+    response_promises = [httpx_async.get(url, follow_redirects=True) for url in URLS]
     responses = await asyncio.gather(*response_promises)
     dt = time.perf_counter() - t0
     print(f"elapsed time: {dt:.1f}")
