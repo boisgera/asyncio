@@ -18,8 +18,8 @@ async def check_timeout(timeout: float):
     dt = time.perf_counter() - t0
     error = f"error: timeout, {dt:.1f} s elapsed."
     # Raise an Exception instead of SystemExit (which is a BaseException),
-    # since asyncio handle those differently. 
-    raise TimeoutError(error) 
+    # since asyncio handles those differently.
+    raise TimeoutError(error)
 
 
 async def solve_challenge(data: bytes, strength: int) -> bytes:
@@ -44,7 +44,7 @@ async def tasks(data: str, strength: int, timeout: float) -> bytes:
     done, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
     first = done.pop()
     try:
-        return first.result() # returns a value of re-raises
+        return first.result()  # returns a value or re-raises
     except TimeoutError as error:
         sys.exit(str(error))
 

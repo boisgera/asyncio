@@ -1,6 +1,5 @@
 import asyncio
 import random
-from venv import create
 
 counter = 0
 
