@@ -28,21 +28,14 @@ async def solve_challenge(data: bytes, strength: int) -> bytes:
 
 async def tasks(data: str, strength: int, timeout: float) -> bytes:
     solver_task = asyncio.create_task(solve_challenge(data, strength))
-    try:
-        t0 = time.perf_counter()
-        result = await asyncio.wait_for(solver_task, timeout)
-    except asyncio.TimeoutError:
-        # # We should also cancel the solver task and manage its unwinding.
-        # solver_task.cancel()
-        # try:
-        #     await solver_task
-        # except asyncio.CancelledError:
-        #     pass
+    t0 = time.perf_counter()
+    done, _ = await asyncio.wait([solver_task], timeout=timeout)
+    if done:
+        return solver_task.result()
+    else:
         dt = time.perf_counter() - t0
         error = f"error: timeout, {dt:.1f} s elapsed."
         sys.exit(error)
-    return result
-
 
 def main(data: str, strength: int = 1, timeout: float = 10.0) -> None:
     data = data.encode("utf-8")

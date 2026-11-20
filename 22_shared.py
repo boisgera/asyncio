@@ -3,6 +3,7 @@ import random
 
 counter = 0
 
+
 async def add(i):
     global counter
     await asyncio.sleep(0.0)
@@ -11,6 +12,7 @@ async def add(i):
     local_counter += i
     await asyncio.sleep(0.0)
     counter = local_counter
+
 
 async def main():
     while True:
@@ -23,9 +25,10 @@ async def main():
         random.shuffle(tasks)
         for task in tasks:
             asyncio.create_task(task)
-        
+
         # 😴 Let the dust settle
         await asyncio.sleep(1)
+
 
 if __name__ == "__main__":
     asyncio.run(main())

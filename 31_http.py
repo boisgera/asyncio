@@ -19,8 +19,8 @@ def main():
     print(f"elapsed time: {dt:.1f}")
     for response in responses:
         _ = response
-        #print(f"response code (200 OK): {response.status_code}")
-        #print(f"response content length (bytes): {len(response.content)}")
+        # print(f"response code (200 OK): {response.status_code}")
+        # print(f"response content length (bytes): {len(response.content)}")
 
 
 if __name__ == "__main__":

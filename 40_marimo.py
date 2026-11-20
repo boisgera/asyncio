@@ -7,6 +7,7 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import marimo as mo
+
     return (mo,)
 
 
@@ -16,12 +17,14 @@ def _():
     from pathlib import Path
     import tempfile
     import time
+
     return asyncio, tempfile
 
 
 @app.cell
 def _():
     import httpx
+
     return (httpx,)
 
 
@@ -56,6 +59,7 @@ def _(mo, tempfile):
         with tempfile.NamedTemporaryFile(mode="wb", delete=False) as file:
             file.write(image_bytes)
         return mo.image(file.name)
+
     return (image,)
 
 
