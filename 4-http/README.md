@@ -23,15 +23,31 @@ uv run marimo edit 4-http/43_http.py
 ```
 
 
-Step 1: Sequential requests ([`41_http.py`](41_http.py))
+**Takeaways:**
+- asyncio shines for I/O-bound work,
+- coroutines do nothing until awaited,
+- running coroutines concurrently and collecting their results in order
+  (`asyncio.gather`),
+- top-level `await` in notebooks (marimo, Jupyter).
+
+
+Step 01: Sequential requests
 --------------------------------------------------------------------------------
 
-`httpx.get` is a regular blocking call. The requests are sent one after the
-other, and each one waits for the previous one to finish. The total time is
-roughly the **sum** of the individual request times.
+`httpx.get` is a regular blocking call:
+
+```python
+responses = []
+for url in URLS:
+    responses.append(httpx.get(url, follow_redirects=True))
+```
+
+The requests are sent one after the other, and each one waits for the
+previous one to finish. The total time is roughly the **sum** of the
+individual request times.
 
 
-Step 2: Concurrent requests ([`42_http.py`](42_http.py))
+Step 02: Concurrent requests
 --------------------------------------------------------------------------------
 
 `httpx.AsyncClient` offers the same API, but its methods are coroutines:
@@ -42,11 +58,11 @@ coroutines = [client.get(url, follow_redirects=True) for url in URLS]
 responses = await asyncio.gather(*coroutines)
 ```
 
-  - Building the list does **not** send anything. Calling `client.get(...)`
-    only creates coroutine objects.
+- Building the list does **not** send anything: calling `client.get(...)`
+  only creates coroutine objects.
 
-  - `asyncio.gather` runs them all concurrently and returns their results
-    **in the same order** as its arguments (not in the order they finish).
+- `asyncio.gather` runs them all concurrently and returns their results
+  **in the same order** as its arguments (not in the order they finish).
 
 While one request waits for the network, the event loop moves the others
 forward. The total time is now roughly that of the **slowest** request.
@@ -61,27 +77,20 @@ async with httpx.AsyncClient() as client:
 ```
 
 
-Step 3: Async in a notebook ([`43_http.py`](43_http.py))
+Step 03: Async in a notebook
 --------------------------------------------------------------------------------
 
 The same experiment in a [marimo](https://marimo.io) notebook, with the
 downloaded images displayed in it:
 
-  - The first cells do the sequential version with `httpx.get` and show the
-    images.
-
-  - Then a cell builds the list of `AsyncClient.get(...)` calls. Its output
-    shows **coroutine objects**, not responses. This confirms that nothing has
-    run yet.
-
-  - The next cell runs them with `await asyncio.gather(...)` directly at the
-    top level of the cell.
+- the first cells do the sequential version with `httpx.get` and show the
+  images;
+- then a cell builds the list of `AsyncClient.get(...)` calls. Its output
+  shows **coroutine objects**, not responses, which confirms that nothing
+  has run yet;
+- the next cell runs them with `await asyncio.gather(...)` directly at the
+  top level of the cell.
 
 Top-level `await` works because the notebook already runs an event loop. In
 that context you write `await ...` and *not* `asyncio.run(...)`. The latter
 would fail, because it cannot start a second event loop inside a running one.
-
-**Takeaways:** asyncio is most useful for I/O-bound work, coroutines do
-nothing until awaited, `asyncio.gather` runs them concurrently and collects
-their results in order, and notebooks such as marimo (or Jupyter) let you
-`await` at the top level.

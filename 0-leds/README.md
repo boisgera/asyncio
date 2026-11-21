@@ -2,16 +2,16 @@ Blinking LEDs
 ================================================================================
 
 We have two "LEDs": 
-- the white one (⚪) is displayed every two seconds and 
-- the black one (⚫) is displayed every second.
+  - the white one (⚪) is displayed every two seconds and 
+  - the black one (⚫) is displayed every second.
 
 
 **Takeaways:** 
-- coroutines (`async def`), 
-- suspension points (`await`), 
-- tasks (`create_task`), 
-- the event loop (`asyncio.run`),
-- events (`asyncio.Event`).
+  - coroutines (`async def`), 
+  - suspension points (`await`), 
+  - tasks (`create_task`), 
+  - the event loop (`asyncio.run`),
+  - events (`asyncio.Event`).
 
 
 Step 01: Synchronous code
@@ -81,10 +81,10 @@ There is still only **one thread**. Concurrency comes from the coroutines
 taking turns at each `await`.
 
 
-Step 3: Coordinating tasks with events
+Step 03: Coordinating tasks with events
 --------------------------------------------------------------------------------
 
-In step 2 the tasks are independent, so nothing controls *the order* in which
+In step 02 the tasks are independent, so nothing controls *the order* in which
 they print when they wake up at the same moment. If we want a precise
 choreography between the two LEDs, and we get it with `asyncio.Event`:
 

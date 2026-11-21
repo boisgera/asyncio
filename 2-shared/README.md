@@ -16,7 +16,14 @@ uv run 2-shared/21_shared.py
 ```
 
 
-Step 1: No suspension point, no problem ([`21_shared.py`](21_shared.py))
+**Takeaways:**
+- code between two `await`s runs without interruption,
+- every `await` is a point where other tasks can modify shared state,
+- race conditions exist even with a single thread,
+- locks protect critical sections (`asyncio.Lock`, `async with`).
+
+
+Step 01: No suspension point, no problem
 --------------------------------------------------------------------------------
 
 ```python
@@ -35,7 +42,7 @@ runs from start to finish without being interrupted. Here the
 read-modify-write is effectively **atomic**.
 
 
-Step 2: A race condition ([`22_shared.py`](22_shared.py))
+Step 02: A race condition
 --------------------------------------------------------------------------------
 
 We add `await asyncio.sleep(0.0)` between the steps. This stands in for any
@@ -45,16 +52,19 @@ middle of an update.
 Output: something like `0 -1 -2 -3 -2 …`. The counter drifts.
 
 Each `await` lets the event loop switch to another task. Now many tasks
-**read** the counter before any of them has **written** its result back. They
-all compute from the same stale value, and each write overwrites the previous
-one. Most updates are lost: this is a classic **race condition**.
+**read** the counter before any of them has **written** its result back:
 
-Note that this happens with a single thread. Concurrency bugs are not only a
+- they all compute from the same stale value and
+- each write overwrites the previous one.
+
+Most updates are lost: this is a classic **race condition**.
+
+Note that this happens with **one thread**. Concurrency bugs are not only a
 multithreading problem: anywhere a task can be suspended in the middle of a
 read-modify-write is a potential race.
 
 
-Step 3: Protecting the update with a lock ([`23_shared.py`](23_shared.py))
+Step 03: Protecting the update with a lock
 --------------------------------------------------------------------------------
 
 An `asyncio.Lock` ensures that only one task at a time runs the critical
@@ -70,7 +80,7 @@ Output: `0 0 0 0 …` again. A task that tries to acquire a lock that is
 already held is suspended until the lock is released, so the updates can no
 longer interleave.
 
-As the comment in the code says, the idiomatic form is:
+The idiomatic form is:
 
 ```python
 async with lock:
@@ -80,7 +90,3 @@ async with lock:
 It is shorter, and it releases the lock even if the critical section raises
 an exception. With the explicit `acquire()`/`release()`, an exception would
 leave the lock held forever.
-
-**Takeaways:** asyncio code is safe *between* two `await`s, every `await` is a
-point where other tasks can modify shared state, and `asyncio.Lock` (with
-`async with`) protects critical sections.
