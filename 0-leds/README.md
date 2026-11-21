@@ -35,9 +35,11 @@ The only way out with plain functions is to merge the two loops by hand into
 a single `display_white_and_black()` with a hard-coded sequence of prints and
 sleeps. That works, but:
 
-  - the merged schedule has to be worked out by hand, and it is easy to get
-    wrong. Look closely: this version repeats every 3 s, so it is *not* the
-    "white every 2 s, black every 1 s" pattern of the two separate functions;
+  - the merged schedule has to be worked out by hand: here a 2 s cycle with
+    a white and a black dot at its start and another black dot after 1 s.
+    That is easy enough for two LEDs, but it quickly becomes error-prone
+    (and soon impractical) with more activities or rhythms that don't divide
+    each other;
 
   - the two independent behaviors are now tangled in one function. Changing
     a rhythm means rewriting the whole schedule.

@@ -19,11 +19,9 @@ def main():
     active = bars.copy()
     while active:
         for bar in active:
-            if bar.n < 100:
-                progress = random.randint(0, 10)
-                bar.update(min(progress, 100 - bar.n))
-            else:
-                active.remove(bar)
+            progress = random.randint(0, 10)
+            bar.update(min(progress, 100 - bar.n))
+        active = [bar for bar in active if bar.n < 100]
         time.sleep(1.0)
     for bar in bars:
         bar.close()

@@ -19,7 +19,7 @@ def display_white_and_black():
         print("⚫")
         time.sleep(1.0)
         print("⚫")
-        time.sleep(2.0)
+        time.sleep(1.0)
 
 
 # display_white()
