@@ -22,6 +22,4 @@ def display_white_and_black():
         time.sleep(1.0)
 
 
-# display_white()
-# display_black()
 display_white_and_black()
